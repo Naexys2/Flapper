@@ -7,7 +7,7 @@ love.graphics.set3D(false)
 local score = 0
 local playcount = 0
 local highscore = 0
-local player = { x = 0, y = 0, speed = 0, maxSpeed = 5 }
+local player = { x = 0, y = 0, speed = 0, maxSpeed = 100 }
 
 local width_top, height_top = love.graphics.getDimensions("top")
 local width_bottom, height_bottom = love.graphics.getDimensions("bottom")
@@ -18,7 +18,7 @@ local touches = {}
 -- Deal with touch input
 function love.touchpressed(id, x, y, dx, dy, pressure)
     touches[id] = { x = x, y = y }
-    player.speed = -3
+    player.speed = -100
 end
 
 -- Deal with touch release
@@ -40,7 +40,7 @@ function love.update(dt)
     elseif player.y > height_top - 20 then
         player.y = height_top - 20
     end
-    player.speed = player.speed + 1 * dt
+    player.speed = player.speed + 100 * dt
     if player.speed > player.maxSpeed then
         player.speed = player.maxSpeed
     end
