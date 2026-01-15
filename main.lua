@@ -1,5 +1,8 @@
 -- File: main.lua
 
+-- Import scripts
+local pipe = require "src.Scripts.pipe"
+
 -- Deactivate 3D mode
 love.graphics.set3D(false)
 
