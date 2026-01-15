@@ -20,10 +20,10 @@ function newPipe(screen_width, screen_height)
 end
 
 -- Function to return new pipe coordinates after movement
-function movePipe(pipeObject)
-    ----------
-    -- Need to implement movement
-    ----------
+function movePipe(pipeObject, dt)
+    local pipeSpeed = 100
+    x1 = pipeObject.x1 + (100 * dt)
+    x2 = pipeObject.x2 + (100 * dt)
     return x1, x2
 end
 
