@@ -6,6 +6,7 @@ local pipe = require "src.Scripts.pipe"
 love.graphics.set3D(false)
 
 -- Initialize variables
+local gameState = "pause"
 local score = 0
 local playcount = 0
 local highscore = 0
@@ -31,6 +32,7 @@ function love.touchpressed(id, x, y, dx, dy, pressure)
         y = y
     }
     player.speed = -100
+    gameState = "play"
 end
 
 -- Deal with touch release
@@ -60,13 +62,15 @@ end
 
 -- Function to draw the player
 function drawPlayer()
-    love.graphics.rectangle("fill", player.x - widthTop / 20, player.y - widthTop / 20, widthTop / 10,
-        widthTop / 10, 10, 10)
+    love.graphics.rectangle("fill", player.x - widthTop / 20, player.y - widthTop / 20, widthTop / 10, widthTop / 10,
+        10, 10)
 end
 
 -- Function to calculate each frame
 function love.update(dt)
-    movePlayer(dt)
+    if gameState == "play" then
+        movePlayer(dt)
+    end
 end
 
 -- Function to draw the calculated frame
@@ -79,6 +83,7 @@ function love.draw(screen)
     -- Draw on bottom screen
     if screen ~= "top" then
         love.graphics.print("Press Start to quit.", 0, 0)
+        love.graphics.print("Press Select to pause.", 0, 20)
     end
 end
 
@@ -86,5 +91,8 @@ end
 function love.gamepadpressed(joystick, button)
     if button == "start" then
         love.event.quit()
+    end
+    if button == "select" then
+        gameState = "pause"
     end
 end
