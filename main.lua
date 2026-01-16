@@ -32,7 +32,9 @@ function love.touchpressed(id, x, y, dx, dy, pressure)
         y = y
     }
     player.speed = -100
-    gameState = "play"
+    if gameState ~= "gameOver" then
+        gameState = "play"
+    end
 end
 
 -- Deal with touch release
@@ -81,9 +83,7 @@ function handlePipes(dt)
     for i, p in ipairs(pipes) do
         pipe.movePipe(p, dt)
         if pipe.isPipeColliding(player.x, player.y, heightTop, p) then
-            ----------
-            -- Add collision consequence
-            ----------
+            gameState = "gameOver"
         end
         if pipe.shouldDestroy(p) then
             pipesToRemove.insert(i)
