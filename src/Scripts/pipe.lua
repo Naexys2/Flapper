@@ -1,6 +1,6 @@
 -- File: pipe.lua
 -- Function to create and return a pipe object
-function newPipe(screen_width, screen_height)
+function newPipe(screenWidth, screenHeight)
     local pipeObject = {
         x1 = 0,
         y1 = 0,
@@ -11,16 +11,16 @@ function newPipe(screen_width, screen_height)
         width2 = 0,
         height2 = 0
     }
-    local pipeWidth = screen_width / 10
-    local pipeHeight = math.random(screen_height / 10, (screen_height / 10) * 6)
-    pipeObject.x1 = screen_width
-    pipeObject.x2 = screen_width
+    local pipeWidth = screenWidth / 10
+    local pipeHeight = math.random(screenHeight / 10, (screenHeight / 10) * 6)
+    pipeObject.x1 = screenWidth
+    pipeObject.x2 = screenWidth
     pipeObject.y1 = 0
-    pipeObject.y2 = pipeHeight + ((screen_height / 10) * 3)
+    pipeObject.y2 = pipeHeight + ((screenHeight / 10) * 3)
     pipeObject.width1 = pipeWidth
     pipeObject.width2 = pipeWidth
     pipeObject.height1 = pipeHeight
-    pipeObject.height2 = screen_height - pipeObject.y2
+    pipeObject.height2 = screenHeight - pipeObject.y2
     return pipeObject
 end
 
@@ -49,8 +49,8 @@ local function isIn(xPoint, yPoint, xRect, yRect, width, height)
 end
 
 -- Function to check for collision between the player and the given pipe
-function isPipeColliding(x, y, screen_height, pipeObject)
-    local playerSize = (screen_height / 20)
+function isPipeColliding(x, y, screenHeight, pipeObject)
+    local playerSize = (screenHeight / 20)
     local playerCorners = {{
         x = x - playerSize,
         y = y - playerSize
