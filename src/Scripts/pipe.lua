@@ -74,3 +74,10 @@ function isPipeColliding(x, y, screen_height, pipeObject)
     end
     return false
 end
+
+function shouldDestroy(pipeObject)
+    if pipeObject.x1 < (0 - pipeObject.width1) or pipeObject.x2 < (0 - pipeObject.width2) then
+        return true
+    end
+    return false
+end
