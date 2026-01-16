@@ -1,5 +1,4 @@
 -- File: main.lua
-
 -- Deactivate 3D mode
 love.graphics.set3D(false)
 
@@ -7,7 +6,12 @@ love.graphics.set3D(false)
 local score = 0
 local playcount = 0
 local highscore = 0
-local player = { x = 0, y = 0, speed = 0, maxSpeed = 100 }
+local player = {
+    x = 0,
+    y = 0,
+    speed = 0,
+    maxSpeed = 100
+}
 
 local width_top, height_top = love.graphics.getDimensions("top")
 local width_bottom, height_bottom = love.graphics.getDimensions("bottom")
@@ -17,7 +21,10 @@ local touches = {}
 
 -- Deal with touch input
 function love.touchpressed(id, x, y, dx, dy, pressure)
-    touches[id] = { x = x, y = y }
+    touches[id] = {
+        x = x,
+        y = y
+    }
     player.speed = -100
 end
 
@@ -48,7 +55,8 @@ end
 
 -- Function to draw the player
 function drawPlayer()
-    love.graphics.rectangle("fill", player.x - width_top / 20, player.y - width_top / 20, width_top / 10, width_top / 10, 10, 10)
+    love.graphics.rectangle("fill", player.x - width_top / 20, player.y - width_top / 20, width_top / 10,
+        width_top / 10, 10, 10)
 end
 
 -- Function to calculate each frame
