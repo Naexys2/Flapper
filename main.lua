@@ -107,6 +107,9 @@ function love.draw(screen)
     -- Draw on top screen
     if screen ~= "bottom" then
         drawPlayer()
+        for i, p in ipairs(pipes) do
+            pipe.drawPipe(p)
+        end
     end
 
     -- Draw on bottom screen
