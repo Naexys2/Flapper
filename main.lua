@@ -14,7 +14,8 @@ local player = {
     x = 0,
     y = 0,
     speed = 0,
-    maxSpeed = 200
+    maxSpeed = 200,
+    size = 0
 }
 local pipes = {}
 local lastPipe = 0
@@ -31,7 +32,9 @@ function love.touchpressed(id, x, y, dx, dy, pressure)
         x = x,
         y = y
     }
-    player.speed = -200
+    if gameState == "play" then
+        player.speed = -100
+    end
     if gameState ~= "gameOver" then
         gameState = "play"
     end
@@ -44,17 +47,18 @@ end
 
 -- Function to initialize the game
 function love.load()
-    player.x = widthTop / 2
+    player.x = widthTop / 4
     player.y = heightTop / 2
+    player.size = (widthTop / 40)
 end
 
 -- Function to update the player's position
-function movePlayer(dt)
+local function movePlayer(dt)
     player.y = player.y + player.speed * dt
-    if player.y < (widthTop / 20) then
-        player.y = (widthTop / 20)
-    elseif player.y > heightTop - (widthTop / 20) then
-        player.y = heightTop - (widthTop / 20)
+    if player.y < player.size then
+        player.y = player.size
+    elseif player.y > heightTop - player.size then
+        player.y = heightTop - player.size
     end
     player.speed = player.speed + 200 * dt
     if player.speed > player.maxSpeed then
@@ -63,15 +67,15 @@ function movePlayer(dt)
 end
 
 -- Function to draw the player
-function drawPlayer()
-    love.graphics.rectangle("fill", player.x - widthTop / 20, player.y - widthTop / 20, widthTop / 10, widthTop / 10,
-        10, 10)
+local function drawPlayer()
+    love.graphics.rectangle("fill", player.x - player.size, player.y - player.size, (player.size * 2),
+        (player.size * 2), 10, 10)
 end
 
 -- Function to handle pipes
-function handlePipes(dt)
+local function handlePipes(dt)
     if lastPipe == 0 then
-        pipes.insert(newPipe(widthTop, heightTop))
+        table.insert(pipes, pipe.newPipe(widthTop, heightTop))
         lastPipe = lastPipe + dt
     else
         lastPipe = lastPipe + dt
@@ -82,11 +86,11 @@ function handlePipes(dt)
     local pipesToRemove = {}
     for i, p in ipairs(pipes) do
         pipe.movePipe(p, dt)
-        if pipe.isPipeColliding(player.x, player.y, heightTop, p) then
+        if pipe.isPipeColliding(player.x, player.y, player.size, p) then
             gameState = "gameOver"
         end
         if pipe.shouldDestroy(p) then
-            pipesToRemove.insert(i)
+            table.insert(pipesToRemove, (i))
         end
     end
     for i, id in ipairs(pipesToRemove) do
@@ -96,8 +100,10 @@ end
 
 -- Function to calculate each frame
 function love.update(dt)
-    if gameState == "play" then
+    if gameState ~= "pause" then
         movePlayer(dt)
+    end
+    if gameState == "play" then
         handlePipes(dt)
     end
 end
@@ -124,7 +130,7 @@ function love.gamepadpressed(joystick, button)
     if button == "start" then
         love.event.quit()
     end
-    if button == "select" then
+    if button == "back" and gameState ~= "gameOver" then
         gameState = "pause"
     end
 end

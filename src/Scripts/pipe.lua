@@ -1,6 +1,7 @@
 -- File: pipe.lua
+local pipe = {}
 -- Function to create and return a pipe object
-function newPipe(screenWidth, screenHeight)
+function pipe.newPipe(screenWidth, screenHeight)
     local pipeObject = {
         x1 = 0,
         y1 = 0,
@@ -25,23 +26,22 @@ function newPipe(screenWidth, screenHeight)
 end
 
 -- Function to return new pipe coordinates after movement
-function movePipe(pipeObject, dt)
+function pipe.movePipe(pipeObject, dt)
     local pipeSpeed = 100
-    x1 = pipeObject.x1 + (100 * dt)
-    x2 = pipeObject.x2 + (100 * dt)
-    return x1, x2
+    pipeObject.x1 = pipeObject.x1 - (100 * dt)
+    pipeObject.x2 = pipeObject.x2 - (100 * dt)
 end
 
 -- Function to draw the given pipe
-function drawPipe(pipeObject)
+function pipe.drawPipe(pipeObject)
     love.graphics.rectangle("fill", pipeObject.x1, pipeObject.y1, pipeObject.width1, pipeObject.height1, 5, 5)
     love.graphics.rectangle("fill", pipeObject.x2, pipeObject.y2, pipeObject.width2, pipeObject.height2, 5, 5)
 end
 
 -- Function to check if a point is in a rectangle
 local function isIn(xPoint, yPoint, xRect, yRect, width, height)
-    if xRect <= xPoint and xPoint <= (xRect + width) then
-        if xRect <= yPoint and yPoint <= (yRect + height) then
+    if xRect < xPoint and xPoint < (xRect + width) then
+        if yRect < yPoint and yPoint < (yRect + height) then
             return true
         end
     end
@@ -49,8 +49,7 @@ local function isIn(xPoint, yPoint, xRect, yRect, width, height)
 end
 
 -- Function to check for collision between the player and the given pipe
-function isPipeColliding(x, y, screenHeight, pipeObject)
-    local playerSize = (screenHeight / 20)
+function pipe.isPipeColliding(x, y, playerSize, pipeObject)
     local playerCorners = {{
         x = x - playerSize,
         y = y - playerSize
@@ -65,19 +64,20 @@ function isPipeColliding(x, y, screenHeight, pipeObject)
         y = y + playerSize
     }}
     for i, corner in ipairs(playerCorners) do
-        if isIn(unpack(corner), pipeObject.x1, pipeObject.y1, pipeObject.width1, pipeObject.height1) then
+        if isIn(corner.x, corner.y, pipeObject.x1, pipeObject.y1, pipeObject.width1, pipeObject.height1) then
             return true
-        end
-        if isIn(unpack(corner), pipeObject.x2, pipeObject.y2, pipeObject.width2, pipeObject.height2) then
+        elseif isIn(corner.x, corner.y, pipeObject.x2, pipeObject.y2, pipeObject.width2, pipeObject.height2) then
             return true
         end
     end
     return false
 end
 
-function shouldDestroy(pipeObject)
+function pipe.shouldDestroy(pipeObject)
     if pipeObject.x1 < (0 - pipeObject.width1) or pipeObject.x2 < (0 - pipeObject.width2) then
         return true
     end
     return false
 end
+
+return pipe
